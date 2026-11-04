@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -79,6 +79,8 @@ const ProductCard = styled.div`
     display: flex;
     flex-direction: column;
     gap: 4px;
+    padding-right: 70px; /* 하트 버튼과 겹치지 않도록 오른쪽 여백 추가 */
+    position: relative; /* 하트 버튼을 절대 위치로 배치하기 위해 부모 요소에 position 설정 */
   }
 
   .title {
@@ -123,6 +125,18 @@ const HeartButton = styled.button`
 export default function WishList() {
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
+
+  const alertShown = useRef(false);
+
+  useEffect(() => {
+    const isLogin = localStorage.getItem("isLogin");
+
+    if (isLogin !== "TRUE" && !alertShown.current) {
+      alertShown.current = true;
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
 
   // 로그인된 사용자 아이디 가져오기
   const currentUserId = localStorage.getItem("userId") || "guest";
@@ -190,7 +204,7 @@ export default function WishList() {
           <EmptyBox>
             <p>❤️ 찜한 상품이 없습니다.</p>
             <p style={{ fontSize: "13px", color: "#94a3b8", marginTop: "6px" }}>
-              상품 전체 페이지에서 마음에 드는 상품을 더블클릭해 보세요!
+              상품 전체 페이지에서 마음에 드는 상품을 클릭해 보세요!
             </p>
           </EmptyBox>
         )}

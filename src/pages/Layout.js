@@ -143,11 +143,12 @@ export default function Layout() {
   // 3. 로그아웃 처리 함수
   const handleLogout = () => {
     localStorage.removeItem("isLogin");
+    localStorage.removeItem("userId");
 
     setIsLogIn(false);
     setUserId("");
     alert("로그아웃 되었습니다.");
-    navigate("/");
+    window.location.replace("/");
   };
 
   const handleSearchSubmit = () => {
