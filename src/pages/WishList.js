@@ -139,7 +139,7 @@ export default function WishList() {
   }, [navigate]);
 
   // 로그인된 사용자 아이디 가져오기
-  const currentUserId = localStorage.getItem("userId") || "guest";
+  const currentUserId = localStorage.getItem("userId");
   const storageKey = `wishlist_${currentUserId}`;
 
   // 찜 목록 불러오기 함수
