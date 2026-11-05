@@ -10,6 +10,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #f8f9fa;
+  min-width: 750px; /* 창이 줄어들어도 레이아웃이 찌그러지지 않게 최소 너비 설정 */
+  /* 필요한 스타일 수정 */
 `;
 
 const Header = styled.header`
