@@ -151,7 +151,7 @@ export default function AllConcertMenu() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const currentUserId = localStorage.getItem("userId") || "guest";
+  const currentUserId = localStorage.getItem("userId");
   const storageKey = `wishlist_${currentUserId}`;
 
   // 전체 상품 초기 데이터
