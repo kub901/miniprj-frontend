@@ -72,8 +72,20 @@ const Login = () => {
       console.log(response.data);
 
       if (response.data) {
+        // 수정 JWT
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("refreshToken", response.data.refreshToken);
+
+        // ⭐ 수정 1: 로그인 상태 저장
         localStorage.setItem("isLogin", "TRUE");
+
+        // ⭐ 수정 2: 로그인 아이디 저장 (기존 코드 유지)
         localStorage.setItem("userId", inputId);
+
+        // ⭐ 수정 3: 백엔드에서 반환한 회원 정보 전체 저장
+
+        // ⭐ 수정 4: 회원 번호 별도 저장
+
         nav("/", { replace: true }); // 메인 홈("/")으로 이동
       } else {
         alert("이메일 또는 비밀번호가 틀립니다.");

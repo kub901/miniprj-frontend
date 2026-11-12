@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../Components/common/BackButton";
+import AxiosApi from "../api/AxiosApi";
+import { maskName, maskPhone, maskEmail } from "../Components/common/Masking";
 
 const AccountInfo = () => {
   const navigate = useNavigate();
@@ -14,35 +16,29 @@ const AccountInfo = () => {
     phone: "",
   });
 
+  // ⭐ 수정: 처음에는 로딩 상태
   const [loading, setLoading] = useState(true);
 
-  // 사용자 정보를 불러오는 API 연동 (기존 팀원 코드 유지)
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("/api/user/profile", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        // JWt 토큰을 이용해 내 회원 정보 조회
+        const response = await AxiosApi.getMypage();
 
-        if (response.ok) {
-          const data = await response.json();
-          setUserInfo({
-            userId: data.userId,
-            email: data.email,
-            name: data.name,
-            phone: data.phone,
-          });
-        }
+        // 3. DB에서 받은 회원 정보 저장
+        setUserInfo({
+          userId: response.data.userId,
+          email: response.data.email,
+          name: response.data.name,
+          phone: response.data.phone,
+        });
       } catch (error) {
-        console.error("유저 정보를 불러오는 데 실패했습니다:", error);
+        console.error("회원 정보 조회 실패:", error);
+        alert("회원 정보를 불러오지 못했습니다.");
       } finally {
         setLoading(false);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -56,61 +52,54 @@ const AccountInfo = () => {
 
   return (
     <Container>
-      {/* 💡 상단 헤더 영역 (공통 백버튼 + 정중앙 타이틀) */}
       <HeaderRow>
         <BackButton to="/mypage" />
         <Title>계정 정보</Title>
       </HeaderRow>
 
       <Box>
-        {/* 아이디 */}
         <Row>
           <Label>아이디</Label>
           <Value>{userInfo.userId}</Value>
         </Row>
 
-        {/* 이메일 */}
         <Row>
           <Label>이메일</Label>
-          <Value>{userInfo.email}</Value>
+          <Value>{maskEmail(userInfo.email)}</Value>
         </Row>
 
-        {/* 이름 */}
         <Row>
           <Label>이름</Label>
           <ValueGroup>
-            <span>{userInfo.name}</span>
+            <span>{maskName(userInfo.name)}</span>
             <ActionButton onClick={() => alert("이름 변경 클릭")}>
               변경
             </ActionButton>
           </ValueGroup>
         </Row>
 
-        {/* 휴대폰 번호 */}
         <Row>
           <Label>휴대폰 번호</Label>
           <ValueGroup>
-            <span>{userInfo.phone}</span>
+            <span>{maskPhone(userInfo.phone)}</span>
             <ActionButton onClick={() => alert("휴대폰 번호 변경 클릭")}>
               변경
             </ActionButton>
           </ValueGroup>
         </Row>
 
-        {/* 배송지 관리 (클릭 시 주소 관리 페이지로 이동) */}
-        <Row clickable onClick={() => navigate("/profile/address")}>
+        {/* 💡 $clickable 로 수정하여 경고 해결 */}
+        <Row $clickable onClick={() => navigate("/profile/address")}>
           <Label>배송지 관리</Label>
           <ArrowButton>&gt;</ArrowButton>
         </Row>
 
-        {/* 본인 인증 */}
-        <Row clickable onClick={() => navigate("/identity-verification")}>
+        <Row $clickable onClick={() => navigate("/identity-verification")}>
           <Label>본인 인증</Label>
           <ArrowButton>&gt;</ArrowButton>
         </Row>
 
-        {/* 결제수단 관리 */}
-        <Row clickable onClick={() => navigate("/payment")}>
+        <Row $clickable onClick={() => navigate("/mypage/payment")}>
           <Label>결제수단 관리</Label>
           <ArrowButton>&gt;</ArrowButton>
         </Row>
@@ -119,7 +108,7 @@ const AccountInfo = () => {
   );
 };
 
-/* ───────── 스타일 컴포넌트 (화이트·블랙·보라 감성) ───────── */
+/* ───────── 스타일 컴포넌트 ───────── */
 const Container = styled.div`
   max-width: 600px;
   width: 100%;
@@ -172,7 +161,8 @@ const Row = styled.div`
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid #f1f5f9;
-  cursor: ${(props) => (props.clickable ? "pointer" : "default")};
+  /* 💡 DOM으로 전달되지 않도록 $clickable 사용 */
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
   transition: all 0.2s ease;
 
   &:last-child {
@@ -181,8 +171,8 @@ const Row = styled.div`
 
   &:hover {
     background-color: ${(props) =>
-      props.clickable ? "#f8f9fa" : "transparent"};
-    border-color: ${(props) => (props.clickable ? "#c327eb" : "#f1f5f9")};
+      props.$clickable ? "#f8f9fa" : "transparent"};
+    border-color: ${(props) => (props.$clickable ? "#c327eb" : "#f1f5f9")};
   }
 `;
 
@@ -208,7 +198,7 @@ const ValueGroup = styled.div`
 const ActionButton = styled.button`
   background: none;
   border: none;
-  color: #c327eb; /* 포인트 보라색 적용 */
+  color: #c327eb;
   text-decoration: underline;
   cursor: pointer;
   font-size: 14px;
