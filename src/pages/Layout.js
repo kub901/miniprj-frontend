@@ -168,11 +168,18 @@ export default function Layout() {
   };
 
   const handleSearchSubmit = () => {
+    // 1. 공백만 입력했거나 빈 칸일 때 처리
     if (!searchKeyword.trim()) {
       alert("검색어를 입력해주세요.");
       return;
     }
-    navigate(`/search?keyword=${searchKeyword}`);
+
+    // 2. AllConcertMenu 페이지 경로로 이동하면서 state에 검색어 담아 보내기
+    // (프로젝트에서 AllConcertMenu가 연결된 실제 주소로 경로를 수정해주세요. 예: '/all-concerts')
+    navigate("/concertlist", { state: { searchTerm: searchKeyword } });
+
+    // 3. (선택사항) 검색 후 상단바 입력창 비우기
+    setSearchKeyword("");
   };
 
   return (
