@@ -30,13 +30,9 @@ const AxiosApi = {
       pwd,
     });
   },
-  //로그아웃 함수
-  memberLogout: async () => {
-    return await AxiosInstance.post("/auth/logout");
-  },
-  // 마이페이지 회원정보 조회
-  getMypage: () => AxiosInstance.get("/auth/mypage"),
 
+  // 마이페이지 회원정보 조회
+  accountInfo: () => AxiosInstance.get("/auth/mypage"),
   // 게시판 관련
   boardWrite: async (title, content, email) =>
     AxiosInstance.post("/board/write", {
@@ -96,6 +92,10 @@ const AxiosApi = {
   // 채팅방 정보
   chatRoom: async (roomId) => {
     return await AxiosInstance.get(`/chat/room/${roomId}`);
+  },
+  // 카카오 로그인
+  kakaoLogin: async (code) => {
+    return await AxiosInstance.post("/auth/kakao", { code });
   },
 };
 

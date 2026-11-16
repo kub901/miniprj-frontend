@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import AxiosApi from "../../api/AxiosApi";
+import AxiosApi from "../api/AxiosApi";
 
 const Container = styled.div`
   max-width: 720px;
