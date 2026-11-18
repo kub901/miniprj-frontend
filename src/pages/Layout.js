@@ -179,7 +179,7 @@ export default function Layout() {
       {/* 공통 헤더 영역 */}
       <Header>
         <Logo onClick={() => navigate("/")}>
-          <img src={logoImg} alt="로고" />
+          <img src={logoImg} alt="로고" draggable="false" />
         </Logo>
 
         <SearchBox>
