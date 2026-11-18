@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "../Components/common/Button";
+import AxiosApi from "../api/AxiosApi";
 
 /* ───────── 스타일 컴포넌트 ───────── */
 const Container = styled.div`
@@ -90,7 +91,7 @@ const CardHeader = styled.div`
 
 const CardBody = styled.div`
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: center;
 
   .thumbnail {
@@ -211,9 +212,6 @@ const ModalContent = styled.div`
 /* ───────── 메인 컴포넌트 ───────── */
 export default function ReservationHistory() {
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const newBooking = location.state?.newBooking;
 
   // 탭 상태 ("all", "upcoming", "completed", "cancelled")
   const [activeTab, setActiveTab] = useState("all");
@@ -222,61 +220,43 @@ export default function ReservationHistory() {
   const [barcodeModalOpen, setBarcodeModalOpen] = useState(false);
   const [currentBarcode, setCurrentBarcode] = useState("");
 
-  // 예시 데이터 + 결제 직후 넘어온 데이터 동적 반영
-  const [reservations, setReservations] = useState([
-    // 1. 이용 예정 예시
-    {
-      id: "20261105-9201",
-      date: "2026-10-27",
-      productId: "1",
-      title: "뮤지컬 <엘리자벳> 특별 공연",
-      location: "서울시 예술의전당 오페라극장",
-      schedule: "2026.11.05 (목) 14:00",
-      seats: "선택 좌석: A1, A2",
-      price: "100,000원",
-      status: "이용 예정",
-    },
-    // 2. 이용 완료 예시
-    {
-      id: "20260910-1042",
-      date: "2026-09-01",
-      productId: "2",
-      title: "인디밴드 가을 콘서트",
-      location: "홍대 클럽웨이브",
-      schedule: "2026.09.10 (토) 19:30",
-      seats: "선택 좌석: R3",
-      price: "50,000원",
-      status: "이용 완료",
-    },
-    // 3. 취소/환불 예시
-    {
-      id: "20260815-3310",
-      date: "2026-08-10",
-      productId: "3",
-      title: "클래식 페스티벌 오케스트라",
-      location: "롯데콘서트홀",
-      schedule: "2026.08.15 (일) 17:00",
-      seats: "선택 좌석: S1",
-      price: "70,000원",
-      status: "취소/환불",
-    },
-    // 결제 완료 후 넘어온 실시간 데이터가 있다면 '이용 예정' 목록에 추가
-    ...(newBooking
-      ? [
-          {
-            id: newBooking.bookingNumber.replace("HP-", ""),
-            date: newBooking.paidAt.split("T")[0],
-            productId: newBooking.productId,
-            title: `상품 ${newBooking.productId} 예매 상품`,
-            location: "공연장 본원 (상세 주소 DB 연동 예정)",
-            schedule: `${newBooking.date} (회차: ${newBooking.sessionId})`,
-            seats: `선택 좌석: ${newBooking.seats.join(", ")}`,
-            price: `${newBooking.totalAmount.toLocaleString()}원`,
-            status: "이용 예정",
-          },
-        ]
-      : []),
-  ]);
+  // 예매 내역 상태
+  const [reservations, setReservations] = useState([]);
+
+  // DB에서 로그인한 회원의 예매 내역 조회
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const response = await AxiosApi.getMyReservations();
+
+        console.log("내 예매 내역:", response.data);
+
+        const mappedReservations = response.data
+          .filter(
+            (item) => item.status === "PAID" || item.status === "CANCELLED",
+          )
+          .map((item) => ({
+            id: item.reservationId,
+            date: item.reservedAt?.split("T")[0],
+            title: item.concertTitle,
+            location: item.location,
+            schedule: `${item.concertDate} ( ${item.concertTime?.slice(0, 5)} )`,
+            seats: `${item.seats.join(", ")}`,
+            price: `${item.price.toLocaleString()}원`,
+            status: item.status === "PAID" ? "이용 예정" : "취소/환불",
+            posterUrl: item.posterUrl,
+            scheduleId: item.scheduleId,
+            productId: item.concertId,
+          }));
+
+        setReservations(mappedReservations);
+      } catch (error) {
+        console.error("예매 내역 조회 실패:", error);
+      }
+    };
+
+    fetchReservations();
+  }, []);
 
   // 예약 취소 버튼 클릭 시
   const handleCancelReservation = (targetId) => {
@@ -361,7 +341,22 @@ export default function ReservationHistory() {
             </CardHeader>
 
             <CardBody>
-              <div className="thumbnail">상품 이미지</div>
+              <div className="thumbnail">
+                {item.posterUrl ? (
+                  <img
+                    src={item.posterUrl}
+                    alt={item.title}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "6px",
+                    }}
+                  />
+                ) : (
+                  "상품 이미지"
+                )}
+              </div>
               <div className="info">
                 <h3>{item.title}</h3>
                 <p>📍 {item.location}</p>
@@ -373,7 +368,7 @@ export default function ReservationHistory() {
                 📅 일시: <strong>{item.schedule}</strong>
               </div>
               <div>
-                💺 내역: <strong>{item.seats}</strong>
+                💺 선택 좌석: <strong>{item.seats}</strong>
               </div>
               <div>
                 💳 결제금액: <strong>{item.price}</strong>
