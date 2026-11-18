@@ -183,7 +183,9 @@ const Home = () => {
   return (
     <ContentWrapper>
       <ProductSection>
-        <ViewAllLink to="/concertlist">상품 전체보기 &gt;</ViewAllLink>
+        <ViewAllLink to="/concertlist" draggable="false">
+          상품 전체보기 &gt;
+        </ViewAllLink>
 
         {/* 상단 상품 카드 4개 영역 (백엔드 더미 데이터 연동) */}
         <TopSection>
@@ -211,6 +213,7 @@ const Home = () => {
                         height: "100%",
                         objectFit: "cover",
                       }}
+                      draggable="false"
                     />
                   ) : (
                     <div

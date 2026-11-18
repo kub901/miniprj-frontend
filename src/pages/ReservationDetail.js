@@ -161,7 +161,7 @@ const ReservationDetail = () => {
       <PosterBox>
         {/* 1. 표지 이미지 */}
         {concert?.posterUrl && (
-          <img src={concert.posterUrl} alt={concert.title} />
+          <img src={concert.posterUrl} alt={concert.title} draggable="false" />
         )}
       </PosterBox>
       {/* 2. 상단 탭 네비게이션 */}

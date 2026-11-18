@@ -192,14 +192,17 @@ export default function Layout() {
         </SearchBox>
 
         <MenuNav>
-          <Link to="/wishlist" className="wish-link">
+          <Link to="/wishlist" className="wish-link" draggable="false">
             찜
           </Link>
 
           {/* 4. 로그인 상태에 따른 조건부 렌더링 */}
           {isLogIn ? (
             <>
-              <Link to="/chat">채팅</Link> {/*로그인 했을떄만 링크 표시 */}
+              <Link to="/chat" draggable="false">
+                채팅
+              </Link>{" "}
+              {/*로그인 했을떄만 링크 표시 */}
               <span className="user-greeting">{userId}님</span>
               <button onClick={handleLogout} className="logout-btn">
                 로그아웃
@@ -207,12 +210,16 @@ export default function Layout() {
             </>
           ) : (
             <>
-              <Link to="/login">로그인</Link>
-              <Link to="/signup">회원가입</Link>
+              <Link to="/login" draggable="false">
+                로그인
+              </Link>
+              <Link to="/signup" draggable="false">
+                회원가입
+              </Link>
             </>
           )}
 
-          <Link to="/mypage" className="mypage-link">
+          <Link to="/mypage" className="mypage-link" draggable="false">
             MY PAGE
           </Link>
         </MenuNav>

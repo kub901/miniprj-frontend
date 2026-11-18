@@ -302,6 +302,7 @@ export default function AllConcertMenu() {
                       height: "100%",
                       objectFit: "cover",
                     }}
+                    draggable="false"
                   />
                 ) : (
                   "상품 이미지"
