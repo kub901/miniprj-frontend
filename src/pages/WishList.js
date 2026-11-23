@@ -11,6 +11,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  user-select: none;
+  -webkit-user-select: none;
 `;
 
 const PageTitle = styled.h2`
@@ -189,7 +191,22 @@ export default function WishList() {
               key={item.id}
               onClick={() => navigate(`/reservation/detail/${item.id}`)}
             >
-              <div className="thumb">상품 이미지</div>
+              <div className="thumb">
+                {item.posterUrl ? (
+                  <img
+                    src={item.posterUrl}
+                    alt={item.title}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    draggable="false"
+                  />
+                ) : (
+                  "상품 이미지"
+                )}
+              </div>
               <div className="info-area">
                 <div className="title">{item.title}</div>
                 <div className="price">{item.price}</div>
