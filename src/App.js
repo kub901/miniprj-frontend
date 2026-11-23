@@ -23,6 +23,7 @@ import PaymentRegister from "./pages/PaymentRegister";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AllConcertMenu from "./pages/AllConcertMenu";
 import KakaoCallback from "./pages/KakaoCallBack";
+import TermsPage from "./pages/Terms";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
           <Route path="/mypage/payment" element={<PaymentManage />} />
           <Route path="/payment-register" element={<PaymentRegister />} />
           <Route path="/concertlist" element={<AllConcertMenu />} />
+          <Route path="/terms" element={<TermsPage />} />
         </Route>
       </Routes>
     </Router>
