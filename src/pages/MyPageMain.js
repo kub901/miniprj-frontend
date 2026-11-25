@@ -111,10 +111,24 @@ const MyPageMain = () => {
       alert("회원탈퇴가 완료되었습니다.");
       navigate("/login", { replace: true });
     } catch (error) {
+      const data = error.response?.data;
       const serverMessage =
-        error.response?.data?.message ||
-        "회원탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.";
-      alert(serverMessage);
+        typeof data === "string" ? data : data?.message || data?.error;
+
+      if (serverMessage) {
+        alert(serverMessage);
+      } else if (
+        error.response?.status === 400 ||
+        error.response?.status === 409
+      ) {
+        alert(
+          "진행 중인 예매가 있어 회원탈퇴를 할 수 없습니다.\n예매 취소 또는 공연 완료 후 다시 시도해 주세요.",
+        );
+      } else {
+        alert(
+          "회원탈퇴 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+        );
+      }
     }
   };
 
