@@ -268,19 +268,7 @@ export function WidgetSuccessPage() {
                 <span>주문번호</span>
                 <b>{orderId}</b>
               </InfoRow>
-
-              <InfoRow>
-                <span>결제키</span>
-                <b>{paymentKey}</b>
-              </InfoRow>
             </PaymentInfoBox>
-
-            {responseData && (
-              <ResponseBox>
-                <h3>결제 처리 결과</h3>
-                <pre>{JSON.stringify(responseData, null, 2)}</pre>
-              </ResponseBox>
-            )}
 
             <HomeButton to="/">메인으로 돌아가기</HomeButton>
           </>

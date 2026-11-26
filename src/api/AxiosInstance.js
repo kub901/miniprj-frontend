@@ -74,7 +74,7 @@ export const scheduleAutoReissue = (expiresAt) => {
       } else {
         clearAuth();
         alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
-        window.location.href = "/";
+        window.location.href = "/login";
       }
     });
   }, delay);
@@ -174,6 +174,8 @@ AxiosInstance.interceptors.response.use(
     const isAuthCall =
       url.includes("/auth/login") ||
       url.includes("/auth/kakao") ||
+      url.includes("/auth/naver") ||
+      url.includes("/auth/google") ||
       url.includes("/auth/reissue");
 
     if (
@@ -196,7 +198,7 @@ AxiosInstance.interceptors.response.use(
     } catch (e) {
       clearAuth();
       alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
-      window.location.href = "/";
+      window.location.href = "/login";
 
       return Promise.reject(e);
     }

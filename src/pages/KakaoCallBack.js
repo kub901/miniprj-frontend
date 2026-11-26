@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AxiosApi from "../api/AxiosApi";
+import { saveAuth } from "../api/AxiosInstance"; // 토큰 저장 및 자동 재발급 예약
 
 // 토큰 Payload(Base64URL)를 디코딩해 sub(이메일 대체값) 꺼내기
 const getSubFromToken = (token) => {
@@ -29,13 +30,8 @@ const KakaoCallback = () => {
     const login = async () => {
       try {
         const { data } = await AxiosApi.kakaoLogin(code);
-
-        const userId = getSubFromToken(data.accessToken);
-
         // 일반 로그인과 같은 TokenDto → 같은 방식으로 저장
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
-        localStorage.setItem("userId", userId);
+        saveAuth(data); // 토큰 저장 및 자동 재발급 예약
         localStorage.setItem("email", getSubFromToken(data.accessToken)); // kakao_회원번호
         localStorage.setItem("isLogin", "TRUE");
         nav("/home", { replace: true });

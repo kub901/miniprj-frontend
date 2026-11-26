@@ -298,7 +298,7 @@ export function WidgetCheckoutPage() {
           <OrderInfoBox>
             <OrderInfoItem>
               <span>상품명</span>
-              <b>{orderInfo.orderName}</b>
+              <b>{reservation?.title ?? "-"}</b>
             </OrderInfoItem>
 
             <OrderInfoItem>

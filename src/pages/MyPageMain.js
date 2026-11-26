@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AxiosApi from "../api/AxiosApi";
+
 /* ───────── 스타일 컴포넌트 ───────── */
 const Container = styled.div`
   max-width: 700px;
@@ -112,6 +113,7 @@ const MyPageMain = () => {
       navigate("/login", { replace: true });
     } catch (error) {
       const data = error.response?.data;
+
       const serverMessage =
         typeof data === "string" ? data : data?.message || data?.error;
 
@@ -165,6 +167,7 @@ const MyPageMain = () => {
         <SectionTitle>활동 관리</SectionTitle>
         <StyledLink to="/mypage/reviews">내가 쓴 리뷰</StyledLink>
       </Section>
+      {/* 4. 회원탈퇴 버튼 */}
       <Button type="button" onClick={handleWithdraw}>
         회원탈퇴
       </Button>

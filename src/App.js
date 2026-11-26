@@ -22,9 +22,12 @@ import PaymentManage from "./pages/PaymentManage";
 import PaymentRegister from "./pages/PaymentRegister";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AllConcertMenu from "./pages/AllConcertMenu";
-import KakaoCallback from "./pages/KakaoCallBack";
+import KakaoCallback from "./pages/KakaoCallback";
+import NaverCallback from "./pages/NaverCallback.js";
+import GoogleCallback from "./pages/GoogleCallback.js";
+import AiAssistant from "./pages/rag/AiAssisastant.js";
 import TermsPage from "./pages/Terms";
-import { PaymentCheckoutPage } from "./pages/PaymentCheckoutPage";
+import { PaymentCheckoutPage } from "./pages/PaymentCheckout";
 import { WidgetCheckoutPage } from "./pages/widget/WidgetCheckout";
 import { WidgetSuccessPage } from "./pages/widget/WidgetSuccess";
 import { FailPage } from "./pages/Fail";
@@ -37,6 +40,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/oauth/kakao" element={<KakaoCallback />} />
+        <Route path="/oauth/naver" element={<NaverCallback />} />
+        <Route path="/oauth/google" element={<GoogleCallback />} />
 
         {/* 2. 기본 경로("/")를 포함하여 Layout을 거치는 페이지들 (홈 화면이 먼저 뜸) */}
         <Route element={<Layout />}>
@@ -69,6 +74,7 @@ function App() {
           <Route path="/mypage/payment" element={<PaymentManage />} />
           <Route path="/payment-register" element={<PaymentRegister />} />
           <Route path="/concertlist" element={<AllConcertMenu />} />
+          <Route path="/ai" element={<AiAssistant />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/toss" element={<PaymentCheckoutPage />} />
           <Route path="/payment/widget" element={<WidgetCheckoutPage />} />

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Input from "../Components/common/Input";
 import AxiosApi from "../api/AxiosApi";
-import { useNavigate, useLocation } from "react-router-dom";
+
 /* ───────── 스타일 컴포넌트 ───────── */
 const Container = styled.div`
   max-width: 900px;
@@ -302,7 +302,6 @@ export default function AllConcertMenu() {
                       height: "100%",
                       objectFit: "cover",
                     }}
-                    draggable="false"
                   />
                 ) : (
                   "상품 이미지"

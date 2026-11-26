@@ -202,6 +202,11 @@ const ReservationSelect = () => {
     setSelectedSessionId(sessionId);
   };
 
+  // 뒤로 가기
+  const handleClose = () => {
+    navigate(-1);
+  };
+
   // 예매하기 버튼
   const handleNextStep = () => {
     const selectedSession = sessionList.find(
