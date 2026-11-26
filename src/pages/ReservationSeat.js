@@ -238,7 +238,7 @@ const ReservationSeat = () => {
       console.log("예매 전송 데이터:", reservationData);
       const res = await AxiosApi.createReservation(reservationData);
 
-      navigate(`/reservation/payment/${res.data.reservationId}`, {
+      navigate(`/payment/widget?reservationId=${res.data.reservationId}`, {
         state: {
           date: date,
           sessionId: sessionId,

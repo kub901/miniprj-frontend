@@ -24,6 +24,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AllConcertMenu from "./pages/AllConcertMenu";
 import KakaoCallback from "./pages/KakaoCallBack";
 import TermsPage from "./pages/Terms";
+import { PaymentCheckoutPage } from "./pages/PaymentCheckoutPage";
+import { WidgetCheckoutPage } from "./pages/widget/WidgetCheckout";
+import { WidgetSuccessPage } from "./pages/widget/WidgetSuccess";
+import { FailPage } from "./pages/Fail";
 
 function App() {
   return (
@@ -66,6 +70,10 @@ function App() {
           <Route path="/payment-register" element={<PaymentRegister />} />
           <Route path="/concertlist" element={<AllConcertMenu />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/toss" element={<PaymentCheckoutPage />} />
+          <Route path="/payment/widget" element={<WidgetCheckoutPage />} />
+          <Route path="/payment/success" element={<WidgetSuccessPage />} />
+          <Route path="/payment/fail" element={<FailPage />} />
         </Route>
       </Routes>
     </Router>
